@@ -80,7 +80,25 @@ for (index in myLibrary){
 
 const addBookButton = document.querySelector('.add-book-btn');
 addBookButton.addEventListener("click", () => {
-    console.log('clicked');
     const addBookForm = document.querySelector('.add-book-form');
     addBookForm.classList.toggle("hidden");
 })
+
+const createBookButton = document.querySelector('.create-book-btn');
+const createBookForm = document.querySelector('.add-book-form');
+createBookButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log('clicked createBook');
+    const formData = new FormData(createBookForm);
+    let values = [];
+    for (const[key, value] of formData){
+        values.push(value);
+    }
+    console.log(...values);
+    addBookToLibrary(...values);
+
+    const newBookObj = myLibrary[myLibrary.length - 1];
+    const newBookCard = createBookCard(newBookObj);
+
+    libraryWrapperDiv.appendChild(newBookCard);
+});

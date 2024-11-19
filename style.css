@@ -3,7 +3,7 @@
 }
 :root {
     font-size: 16px;
-    color: #343136;
+    color:#5d476b;
 }
 .wrapper {
     display: grid;
@@ -19,8 +19,8 @@
     width: 100%;
     padding: 1rem;
     font-size: 1.35rem;
-    color: #343136;
-    border: 1px solid #e3e3e3;
+    color:#5d476b;    
+    border: 1px dotted #5d476b;
 }
 .hidden {
     display: none;
