@@ -97,4 +97,5 @@ createBookButton.addEventListener("click", (e) => {
     const newBookCard = createBookCard(newBookObj);
 
     libraryWrapperDiv.appendChild(newBookCard);
+    createBookForm.reset();
 });
