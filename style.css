@@ -28,8 +28,10 @@
 .add-book-form {
     grid-column: 1/ 4;
     padding: 1rem;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #5d476b;
     margin: 1rem auto;
+    color:#5d476b;
+    background-color: #f0ecec;
     border-radius: 8px;
 }
 .add-book-form > *:not(:last-child) {
@@ -41,8 +43,9 @@
     display: block;
     width: 100%;
     margin: 0.4rem 0;
+    color: #5d476b;
     padding: 5px;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #5d476b;
 }
 .add-book-form input[type=submit] {
     font-size: 1.2rem;

@@ -53,14 +53,16 @@ addBookToLibrary("Flyte", "Ange Page", 340, 2);
 
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
 
-const createBookCard = function(bookObj) {
+const createBookCard = function(bookObj, index) {
     const newBookCard = document.createElement("div");
     newBookCard.classList.add("book-card");
 
-    const createAndSetTag = (tag, innerContent) => {
+    const createAndSetTag = (tag, innerContent, className) => {
         const newElement = document.createElement(tag);
         newElement.innerText = innerContent;
+        className ? newElement.classList.add(className) : "";
         newBookCard.appendChild(newElement);
+        return newElement;
     }
     createAndSetTag("h2", bookObj.title);
     createAndSetTag("h3", bookObj.author);
@@ -69,14 +71,24 @@ const createBookCard = function(bookObj) {
     createAndSetTag("p", bookObj.readStatus);
     createAndSetTag("p", bookObj.isReadWish ? `In your ToRead list`: ``);
     createAndSetTag("p", bookObj.isBorrowed ? `Already Borrowed` : `Can borrow`);
-
+    const deleteButton = createAndSetTag("button", "Remove Book", "removeBook");
+    newBookCard.dataset.index = index;
+    deleteButton.addEventListener("click", deleteBook);
     return newBookCard;
 }
 
+const deleteBook = (e) => {
+    const bookCardToDelete = e.target.parentNode;
+    const bookIndexToRemove = bookCardToDelete.dataset.index;
+    delete myLibrary[bookIndexToRemove];
+    libraryWrapperDiv.removeChild(bookCardToDelete);
+}
 
 for (index in myLibrary){
-    libraryWrapperDiv.appendChild(createBookCard(myLibrary[index]));
+    libraryWrapperDiv.appendChild(createBookCard(myLibrary[index], index));
 }
+
+
 
 const addBookButton = document.querySelector('.add-book-btn');
 addBookButton.addEventListener("click", () => {
@@ -94,7 +106,7 @@ createBookButton.addEventListener("click", (e) => {
     addBookToLibrary(...values);
 
     const newBookObj = myLibrary[myLibrary.length - 1];
-    const newBookCard = createBookCard(newBookObj);
+    const newBookCard = createBookCard(newBookObj, myLibrary.length - 1);
 
     libraryWrapperDiv.appendChild(newBookCard);
     createBookForm.reset();
