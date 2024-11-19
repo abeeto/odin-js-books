@@ -88,13 +88,9 @@ const createBookButton = document.querySelector('.create-book-btn');
 const createBookForm = document.querySelector('.add-book-form');
 createBookButton.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log('clicked createBook');
     const formData = new FormData(createBookForm);
-    let values = [];
-    for (const[key, value] of formData){
-        values.push(value);
-    }
-    console.log(...values);
+    const [...values] = formData.values();
+    console.log(values);
     addBookToLibrary(...values);
 
     const newBookObj = myLibrary[myLibrary.length - 1];
