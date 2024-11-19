@@ -5,7 +5,7 @@ function Book(title, author, pages, availableCopies) {
     this.author = author;
     this.pages = pages;
     this.availableCopies = availableCopies;
-    this.readStatus = "not read";  // not read, reading, read
+    this.readStatus = "unread";  // not read, reading, read
     this.isReadWish = false; 
     this.isBorrowed = false;
 }
@@ -50,6 +50,29 @@ addBookToLibrary("Barnia", "C.K Lewis", 134, 4);
 addBookToLibrary("Magik", "Ange Page", 340, 2);
 
 
-for (const book in myLibrary){
-    console.log(myLibrary[book].info());
+const libraryWrapperDiv = document.querySelector(".library-wrapper");
+
+const createBookCard = function(bookObj) {
+    const newBookCard = document.createElement("div");
+    newBookCard.classList.add("book-card");
+
+    const createAndSetTag = (tag, innerContent) => {
+        const newElement = document.createElement(tag);
+        newElement.innerText = innerContent;
+        newBookCard.appendChild(newElement);
+    }
+    createAndSetTag("h2", bookObj.title);
+    createAndSetTag("h3", bookObj.author);
+    createAndSetTag("p", `${bookObj.pages} pages`);
+    createAndSetTag("p", `${bookObj.availableCopies} copies available`);;
+    createAndSetTag("p", bookObj.readStatus);
+    createAndSetTag("p", bookObj.isReadWish ? `In your ToRead list`: ``);
+    createAndSetTag("p", bookObj.isBorrowed ? `Already Borrowed` : `Can borrow`);
+
+    return newBookCard;
+}
+
+
+for (index in myLibrary){
+    libraryWrapperDiv.appendChild(createBookCard(myLibrary[index]));
 }
