@@ -1,24 +1,72 @@
+* {
+    box-sizing: border-box;
+}
 :root {
     font-size: 16px;
+    color: #343136;
 }
 .wrapper {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr;
+}
+.add-book-wrapper {
+    grid-column: 1 / 4;
+    width: 100%;
+    padding-inline: 2rem;
+}
+.add-book-wrapper button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.35rem;
+    color: #343136;
+    border: 1px solid #e3e3e3;
+}
+.hidden {
+    display: none;
+}
+.add-book-form {
+    grid-column: 1/ 4;
+    padding: 1rem;
+    border: 1px solid #e3e3e3;
+    margin: 1rem auto;
+    border-radius: 8px;
+}
+.add-book-form > *:not(:last-child) {
+    margin-bottom: 1rem;
+    border: 1px solid #e3e3e3;
+    color: #343136;
+}
+.add-book-form input {
     display: block;
-    margin-inline: auto;
-    max-width: 800px;
+    width: 100%;
+    margin: 0.4rem 0;
+    padding: 5px;
+    border: 1px solid #e3e3e3;
+}
+.add-book-form input[type=submit] {
+    font-size: 1.2rem;
+    color:#343136;
 }
 
 .library-wrapper {
+    grid-column: 4 / 10;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: 300px;
+    grid-auto-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-rows: 300px;
+    width: 100%;
     gap: 20px;
+    margin-inline: auto;
 }
 
 .book-card {
     display: flex;
     flex-direction: column;
-    outline: 1px solid black;
-    background-color: #e3e3e3;
-    min-height: 250px;
+    border: 1px solid #5d476b;
+    color:#5d476b;
+    background-color: #f0ecec;
     padding: 1rem;
 }
 

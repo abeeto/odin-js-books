@@ -9,8 +9,26 @@
 </head>
 <body>
     <div class="wrapper">
+        <div class="add-book-wrapper">
+            <button class="add-book-btn">Add book</button>
+            <form action="#" class="add-book-form hidden">
+                <fieldset>
+                    <legend>Book Information</legend>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" required>
+                    <label for="author">Author Name</label>
+                    <input type="text" name="author" id="author">
+
+                    <label for="pages">Pages:</label>
+                    <input name="pages" id="pages" type="number" placeholder="number of pages" min="0" step="1">
+
+                    <label for="copiesAvailable">Copies:</label>
+                    <input name="availableCopies" id="copiesAvailable" type="number" placeholder="number of copies" min="0" step="1" value="0" required>
+                </fieldset>
+                <input type="submit">
+            </form>
+        </div>
         <div class="library-wrapper">
-            
         </div>
     </div>
 </body>

@@ -48,6 +48,7 @@ addBookToLibrary("Harry", "Just Kidding Rowling", 134, 15);
 addBookToLibrary("Erago", "Brisofer Poalini", 134, 7);
 addBookToLibrary("Barnia", "C.K Lewis", 134, 4);
 addBookToLibrary("Magik", "Ange Page", 340, 2);
+addBookToLibrary("Flyte", "Ange Page", 340, 2);
 
 
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
@@ -76,3 +77,10 @@ const createBookCard = function(bookObj) {
 for (index in myLibrary){
     libraryWrapperDiv.appendChild(createBookCard(myLibrary[index]));
 }
+
+const addBookButton = document.querySelector('.add-book-btn');
+addBookButton.addEventListener("click", () => {
+    console.log('clicked');
+    const addBookForm = document.querySelector('.add-book-form');
+    addBookForm.classList.toggle("hidden");
+})
