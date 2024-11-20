@@ -6,18 +6,11 @@ function Book(title, author, pages, availableCopies) {
     this.pages = pages;
     this.availableCopies = availableCopies;
     this.readStatus = "unread";  // unread, reading, read
-    this.isReadWish = false; 
-    this.isBorrowed = false;
 }
 
-Book.prototype.startRead = function() {
-    this.readStatus = "reading";
-}
-Book.prototype.finishRead = function() {
-    this.readStatus = "read";
-}
-Book.prototype.setReadWish = function() {
-    this.isReadWish = !this.isReadWish;
+function addBookToLibrary(title, author, pages, availableCopies) {
+    let newBook = new Book(title, author, pages, availableCopies);
+    myLibrary.push(newBook);
 }
 
 // TODO: make this a promise?
@@ -36,12 +29,6 @@ Book.prototype.returnBook = function() {
 
 Book.prototype.info = function() {
     return `${this.title} by author ${this.author} has ${this.pages} pages. At this moment, this book ${this.isBorrowed ? "borrowed": "not borrowed"} by you. There are ${this.availableCopies} in the library. Book Reading Status: ${this.readStatus}. Want to read: ${this.isReadWish ? "Y" : "N"}`;
-}
-
-
-function addBookToLibrary(title, author, pages, availableCopies) {
-    let newBook = new Book(title, author, pages, availableCopies);
-    myLibrary.push(newBook);
 }
 
 addBookToLibrary("Harry", "Just Kidding Rowling", 134, 15);
@@ -70,8 +57,6 @@ const createBookCard = function(bookObj, index) {
     createAndSetTag("p", `${bookObj.pages} pages`);
     createAndSetTag("p", `${bookObj.availableCopies} copies available`);;
     createAndSetTag("p", bookObj.readStatus, "readStatusLabel");
-    createAndSetTag("p", bookObj.isReadWish ? `In your ToRead list`: ``);
-    createAndSetTag("p", bookObj.isBorrowed ? `Already borrowed` : `Can borrow`);
 
     const deleteButton = createAndSetTag("button", "Remove Book", "removeBook");
     const readStatusButton = createAndSetTag("button", "Already Read?", "readStatusButton")
