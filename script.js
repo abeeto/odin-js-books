@@ -40,6 +40,24 @@ addBookToLibrary("Magik", "Ange Page", 340, 2);
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
 
 const createBookCard = function(bookObj, index) {
+    const newBookCard = document.createElement("div");
+    newBookCard.classList.add("book-card");
+    newBookCard.dataset.index = index;
+
+    const createBookCover = (title, author) =>
+    {
+        const bookCoverNode = document.createElement("div");
+        bookCoverNode.classList.add("book-cover");
+        const titleNode = document.createElement("h2");
+        titleNode.innerText = title;
+        const authorNode = document.createElement("h3");
+        authorNode.innerText = author;
+
+        bookCoverNode.appendChild(titleNode);
+        bookCoverNode.appendChild(authorNode);
+        newBookCard.appendChild(bookCoverNode);
+    }   
+
     const createAndSetTag = (tag, innerContent, className) => {
         const newElement = document.createElement(tag);
         newElement.innerText = innerContent;
@@ -48,12 +66,9 @@ const createBookCard = function(bookObj, index) {
         return newElement;
     }
 
-    const newBookCard = document.createElement("div");
-    newBookCard.classList.add("book-card");
-    newBookCard.dataset.index = index;
 
-    createAndSetTag("h2", bookObj.title);
-    createAndSetTag("h3", bookObj.author);
+
+    createBookCover(bookObj.title, bookObj.author);
     createAndSetTag("p", `${bookObj.pages} pages`);
     createAndSetTag("p", `${bookObj.availableCopies} copies available`);;
     createAndSetTag("p", bookObj.readStatus, "readStatusLabel");
