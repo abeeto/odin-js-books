@@ -98,7 +98,7 @@ const updateReadStatus = (e) => {
     const newReadStatus = newStatus;
     
     readStatusLabel.innerText = newReadStatus;
-    e.target.innerText = "Unread again?";
+    e.target.innerText = bookObject.readStatus === "read" ? "Set to unread" : "Already read";
 }
 
 const deleteBook = (e) => {
