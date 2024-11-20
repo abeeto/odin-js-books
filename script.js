@@ -5,7 +5,7 @@ function Book(title, author, pages, availableCopies) {
     this.author = author;
     this.pages = pages;
     this.availableCopies = availableCopies;
-    this.readStatus = "unread";  // not read, reading, read
+    this.readStatus = "unread";  // unread, reading, read
     this.isReadWish = false; 
     this.isBorrowed = false;
 }
@@ -48,15 +48,11 @@ addBookToLibrary("Harry", "Just Kidding Rowling", 134, 15);
 addBookToLibrary("Erago", "Brisofer Poalini", 134, 7);
 addBookToLibrary("Barnia", "C.K Lewis", 134, 4);
 addBookToLibrary("Magik", "Ange Page", 340, 2);
-addBookToLibrary("Flyte", "Ange Page", 340, 2);
 
 
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
 
 const createBookCard = function(bookObj, index) {
-    const newBookCard = document.createElement("div");
-    newBookCard.classList.add("book-card");
-
     const createAndSetTag = (tag, innerContent, className) => {
         const newElement = document.createElement(tag);
         newElement.innerText = innerContent;
@@ -64,17 +60,45 @@ const createBookCard = function(bookObj, index) {
         newBookCard.appendChild(newElement);
         return newElement;
     }
+
+    const newBookCard = document.createElement("div");
+    newBookCard.classList.add("book-card");
+    newBookCard.dataset.index = index;
+
     createAndSetTag("h2", bookObj.title);
     createAndSetTag("h3", bookObj.author);
     createAndSetTag("p", `${bookObj.pages} pages`);
     createAndSetTag("p", `${bookObj.availableCopies} copies available`);;
-    createAndSetTag("p", bookObj.readStatus);
+    createAndSetTag("p", bookObj.readStatus, "readStatusLabel");
     createAndSetTag("p", bookObj.isReadWish ? `In your ToRead list`: ``);
-    createAndSetTag("p", bookObj.isBorrowed ? `Already Borrowed` : `Can borrow`);
+    createAndSetTag("p", bookObj.isBorrowed ? `Already borrowed` : `Can borrow`);
+
     const deleteButton = createAndSetTag("button", "Remove Book", "removeBook");
-    newBookCard.dataset.index = index;
+    const readStatusButton = createAndSetTag("button", "Already Read?", "readStatusButton")
+    
+    readStatusButton.addEventListener("click", updateReadStatus);
     deleteButton.addEventListener("click", deleteBook);
+    
     return newBookCard;
+}
+
+const updateReadStatus = (e) => {
+    const bookCard = e.target.parentNode;
+    const bookIndex = bookCard.dataset.index;
+
+    const bookObject = myLibrary[bookIndex];
+
+    const currentReadStatus= bookObject.readStatus;
+    
+    const readStatusLabel = bookCard.querySelector(".readStatusLabel");
+    const toChange = {"unread": "read", "read": "unread"};
+    const newStatus = toChange[currentReadStatus];
+    
+    bookObject.readStatus = newStatus;
+    const newReadStatus = newStatus;
+    
+    readStatusLabel.innerText = newReadStatus;
+    e.target.innerText = "Unread again?";
 }
 
 const deleteBook = (e) => {
@@ -88,8 +112,6 @@ for (index in myLibrary){
     libraryWrapperDiv.appendChild(createBookCard(myLibrary[index], index));
 }
 
-
-
 const addBookButton = document.querySelector('.add-book-btn');
 addBookButton.addEventListener("click", () => {
     const addBookForm = document.querySelector('.add-book-form');
@@ -102,7 +124,6 @@ createBookButton.addEventListener("click", (e) => {
     e.preventDefault();
     const formData = new FormData(createBookForm);
     const [...values] = formData.values();
-    console.log(values);
     addBookToLibrary(...values);
 
     const newBookObj = myLibrary[myLibrary.length - 1];
