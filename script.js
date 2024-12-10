@@ -1,7 +1,7 @@
 const myLibrary = [];
 
-function addBookToLibrary(title, author, pages, availableCopies) {
-    let newBook = new Book(title, author, pages, availableCopies);
+function addBookToLibrary(title, author, pages) {
+    let newBook = new Book(title, author, pages);
     myLibrary.push(newBook);
 }
 
@@ -14,7 +14,7 @@ class Book {
         this.title = title;
         this.author = author;
         this.pages = pages;
-        this.#readBool = false;
+        this.readBool = false;
     }
 
     set title(titleName){
@@ -34,13 +34,9 @@ class Book {
         }
     }
     set pages(pageNumbers){
-        if (typeof pageNumbers === "number" && pageNumbers > 0){
-            this.#pages = pageNumbers;
-        }else {
-            console.error(`Invalid page number`);
-        }
+        this.#pages = pageNumbers;
     }
-    get #readStatus() {
+    get readStatus() {
         return this.#readBool ? "read" : "unread";
     }
     get readBool() {
@@ -54,10 +50,10 @@ class Book {
     }
 
     get info() {
-        return `${this.#title} written by ${this.#author} has ${this.#pages} pages. Book Reading Status: ${this.#readStatus}.`;
+        return `${this.#title} written by ${this.#author} has ${this.#pages} pages. Book Reading Status: ${this.readStatus}.`;
     }
     get object() {
-        return {title: this.#title, author: this.#author, pages: this.#pages, readStatus: this.#readStatus}
+        return {title: this.#title, author: this.#author, pages: this.#pages, readStatus: this.readStatus}
     }
 }
 
@@ -67,6 +63,10 @@ const bookTwo = new Book("Erago", "Brisofer Poalini", 134);
 const bookThree = new Book("Barnia", "C.K Lewis", 134);
 const bookFour = new Book("Magik", "Ange Page", 340);
 
+myLibrary.push(bookOne);
+myLibrary.push(bookTwo);
+myLibrary.push(bookThree);
+myLibrary.push(bookFour);
 
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
 
@@ -98,7 +98,6 @@ const createBookCard = function (bookObj, index) {
 
     createBookCover(bookObj.title, bookObj.author);
     createAndSetTag("p", `${bookObj.pages} pages`);
-    createAndSetTag("p", `${bookObj.availableCopies} copies available`);
     createAndSetTag("p", bookObj.readStatus, "readStatusLabel");
 
     const deleteButton = createAndSetTag("button", "Remove Book", "removeBook");
@@ -113,18 +112,11 @@ const createBookCard = function (bookObj, index) {
 const updateReadStatus = (e) => {
     const bookCard = e.target.parentNode;
     const bookIndex = bookCard.dataset.index;
-
-    const bookObject = myLibrary[bookIndex];
-    const currentReadStatus = bookObject.readStatus;
-
+    const bookInstance = myLibrary[bookIndex];
+    bookInstance.toggleReadStatus();
+    const bookObject = bookInstance.object;
     const readStatusLabel = bookCard.querySelector(".readStatusLabel");
-    const toChange = { "unread": "read", "read": "unread" };
-    const newStatus = toChange[currentReadStatus];
-
-    bookObject.readStatus = newStatus;
-    const newReadStatus = newStatus;
-
-    readStatusLabel.innerText = newReadStatus;
+    readStatusLabel.innerText = bookObject.readStatus;
     e.target.innerText = bookObject.readStatus === "read" ? "Set to unread" : "Already read";
 }
 
@@ -136,7 +128,7 @@ const deleteBook = (e) => {
 }
 
 for (index in myLibrary) {
-    libraryWrapperDiv.appendChild(createBookCard(myLibrary[index], index));
+    libraryWrapperDiv.appendChild(createBookCard(myLibrary[index].object, index));
 }
 
 const addBookButton = document.querySelector('.add-book-btn');
@@ -152,8 +144,7 @@ createBookButton.addEventListener("click", (e) => {
     const formData = new FormData(createBookForm);
     const [...values] = formData.values();
     addBookToLibrary(...values);
-
-    const newBookObj = myLibrary[myLibrary.length - 1];
+    const newBookObj = myLibrary[myLibrary.length-1].object;
     const newBookCard = createBookCard(newBookObj, myLibrary.length - 1);
 
     libraryWrapperDiv.appendChild(newBookCard);
