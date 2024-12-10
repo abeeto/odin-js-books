@@ -1,51 +1,81 @@
 const myLibrary = [];
 
-function Book(title, author, pages, availableCopies) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.availableCopies = availableCopies;
-    this.readStatus = "unread";  // unread, reading, read
-}
-
 function addBookToLibrary(title, author, pages, availableCopies) {
     let newBook = new Book(title, author, pages, availableCopies);
     myLibrary.push(newBook);
 }
 
-// TODO: make this a promise?
-Book.prototype.borrow = function() {
-    if (!this.isBorrowed && this.availableCopies > 0) { 
-        this.availableCopies -= 1;
-        this.isBorrowed = true;
-    } else {
-        return `ERROR: No available copies to borrow from or you've already borrowed`;
-    };
-}
-Book.prototype.returnBook = function() {
-    this.isBorrowed = false;
-    this.availableCopies += 1;
+class Book {
+    #title;
+    #author;
+    #pages;
+    #readBool;
+    constructor(title, author, pages) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.#readBool = false;
+    }
+
+    set title(titleName){
+        if (typeof titleName === "string" && titleName.length > 0){
+            this.#title = titleName
+        }else {
+            console.error(`Invalid title entry`);
+        }
+    }
+    set author(authorName){
+        if (typeof authorName === "string" && authorName.length > 0){
+            this.#author = authorName;
+        }else if (authorName === undefined || authorName === null ) {
+            this.#author = "Anonymous"
+        }else {
+            throw console.error(`Invalid author entry`);
+        }
+    }
+    set pages(pageNumbers){
+        if (typeof pageNumbers === "number" && pageNumbers > 0){
+            this.#pages = pageNumbers;
+        }else {
+            console.error(`Invalid page number`);
+        }
+    }
+    get #readStatus() {
+        return this.#readBool ? "read" : "unread";
+    }
+    get readBool() {
+        return this.#readBool;
+    }
+    set readBool(x) {
+        this.#readBool = x;
+    }
+    toggleReadStatus() {
+        this.#readBool = !this.#readBool;
+    }
+
+    get info() {
+        return `${this.#title} written by ${this.#author} has ${this.#pages} pages. Book Reading Status: ${this.#readStatus}.`;
+    }
+    get object() {
+        return {title: this.#title, author: this.#author, pages: this.#pages, readStatus: this.#readStatus}
+    }
 }
 
-Book.prototype.info = function() {
-    return `${this.title} by author ${this.author} has ${this.pages} pages. At this moment, this book ${this.isBorrowed ? "borrowed": "not borrowed"} by you. There are ${this.availableCopies} in the library. Book Reading Status: ${this.readStatus}. Want to read: ${this.isReadWish ? "Y" : "N"}`;
-}
 
-addBookToLibrary("Harry", "Just Kidding Rowling", 134, 15);
-addBookToLibrary("Erago", "Brisofer Poalini", 134, 7);
-addBookToLibrary("Barnia", "C.K Lewis", 134, 4);
-addBookToLibrary("Magik", "Ange Page", 340, 2);
+const bookOne = new Book("Harry", "Just Kidding Rowling", 134);
+const bookTwo = new Book("Erago", "Brisofer Poalini", 134);
+const bookThree = new Book("Barnia", "C.K Lewis", 134);
+const bookFour = new Book("Magik", "Ange Page", 340);
 
 
 const libraryWrapperDiv = document.querySelector(".library-wrapper");
 
-const createBookCard = function(bookObj, index) {
+const createBookCard = function (bookObj, index) {
     const newBookCard = document.createElement("div");
     newBookCard.classList.add("book-card");
     newBookCard.dataset.index = index;
 
-    const createBookCover = (title, author) =>
-    {
+    const createBookCover = (title, author) => {
         const bookCoverNode = document.createElement("div");
         bookCoverNode.classList.add("book-cover");
         const titleNode = document.createElement("h2");
@@ -56,7 +86,7 @@ const createBookCard = function(bookObj, index) {
         bookCoverNode.appendChild(titleNode);
         bookCoverNode.appendChild(authorNode);
         newBookCard.appendChild(bookCoverNode);
-    }   
+    }
 
     const createAndSetTag = (tag, innerContent, className) => {
         const newElement = document.createElement(tag);
@@ -66,19 +96,17 @@ const createBookCard = function(bookObj, index) {
         return newElement;
     }
 
-
-
     createBookCover(bookObj.title, bookObj.author);
     createAndSetTag("p", `${bookObj.pages} pages`);
-    createAndSetTag("p", `${bookObj.availableCopies} copies available`);;
+    createAndSetTag("p", `${bookObj.availableCopies} copies available`);
     createAndSetTag("p", bookObj.readStatus, "readStatusLabel");
 
     const deleteButton = createAndSetTag("button", "Remove Book", "removeBook");
     const readStatusButton = createAndSetTag("button", "Already Read?", "readStatusButton")
-    
+
     readStatusButton.addEventListener("click", updateReadStatus);
     deleteButton.addEventListener("click", deleteBook);
-    
+
     return newBookCard;
 }
 
@@ -87,16 +115,15 @@ const updateReadStatus = (e) => {
     const bookIndex = bookCard.dataset.index;
 
     const bookObject = myLibrary[bookIndex];
+    const currentReadStatus = bookObject.readStatus;
 
-    const currentReadStatus= bookObject.readStatus;
-    
     const readStatusLabel = bookCard.querySelector(".readStatusLabel");
-    const toChange = {"unread": "read", "read": "unread"};
+    const toChange = { "unread": "read", "read": "unread" };
     const newStatus = toChange[currentReadStatus];
-    
+
     bookObject.readStatus = newStatus;
     const newReadStatus = newStatus;
-    
+
     readStatusLabel.innerText = newReadStatus;
     e.target.innerText = bookObject.readStatus === "read" ? "Set to unread" : "Already read";
 }
@@ -108,7 +135,7 @@ const deleteBook = (e) => {
     libraryWrapperDiv.removeChild(bookCardToDelete);
 }
 
-for (index in myLibrary){
+for (index in myLibrary) {
     libraryWrapperDiv.appendChild(createBookCard(myLibrary[index], index));
 }
 
